@@ -7,9 +7,10 @@ using UnityEngine;
  * -Trunk prefab
  * -Left Branch prefab
  * -Right Branch prefab
+ * -Apple prefab
  */
 
-public class DeleteTree : MonoBehaviour
+public class DeleteObject : MonoBehaviour
 {
     // delete the object this script is attached to if it collides with the side border
     private void OnTriggerEnter2D(Collider2D collision)
