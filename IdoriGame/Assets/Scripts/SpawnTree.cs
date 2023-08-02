@@ -28,6 +28,8 @@ public class SpawnTree : MonoBehaviour
     public float minSpawnLag;
     public float maxSpawnLag;
 
+    public GameObject gameManager;
+
     // float that's used to help with the timing of tree spawns
     private float spawnTime;
 
@@ -73,5 +75,13 @@ public class SpawnTree : MonoBehaviour
         // edit the clones' scales to change the lengths of the branches
         leftBranchClone.transform.localScale = new Vector3(randomBranchLength_Left, 0.3f, 1);
         rightBranchClone.transform.localScale = new Vector3(randomBranchLength_Right, 0.3f, 1);
+
+        //rightBranchClone.transform.localScale = new Vector3(-rightBranchClone.transform.localScale.x, rightBranchClone.transform.localScale.y, rightBranchClone.transform.localScale.z);
+
+        // spawn items
+        SpawnItem itemSpawner = gameManager.GetComponent<SpawnItem>();
+
+        itemSpawner.Spawn(leftBranchClone);
+        itemSpawner.Spawn(rightBranchClone);
     }
 }
