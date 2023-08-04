@@ -4,20 +4,14 @@ using UnityEngine;
 
 /**
  * This script is attached to:
- * -Trunk prefab
- * -Left Branch prefab
- * -Right Branch prefab
- * -Apple prefab
+ * -Side Border
  */
 
 public class DeleteObject : MonoBehaviour
 {
-    // delete the object this script is attached to if it collides with the side border
+    // delete everything that this object collides with
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Border")
-        {
-            Destroy(this.gameObject);
-        }
+        Destroy(collision.gameObject);
     }
 }

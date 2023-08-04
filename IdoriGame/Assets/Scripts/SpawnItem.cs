@@ -20,8 +20,8 @@ public class SpawnItem : MonoBehaviour
         float spriteWidth = sRenderer.sprite.bounds.size.x * branch.transform.lossyScale.x;
 
         float itemPosX;
-        float itemPosY = branch.transform.position.y + 0.6f;
-        float offset = 0.5f;
+        float itemPosY = branch.transform.position.y + 0.8f;
+        float offset = 1f;
 
         if(branch.tag == "Right")
         {
@@ -33,7 +33,7 @@ public class SpawnItem : MonoBehaviour
 
         if(Random.Range(0f, 1f) <= spawnChance)
         {
-            Instantiate(apple, new Vector3(itemPosX, itemPosY, 0), transform.rotation);
+            Instantiate(apple, new Vector3(itemPosX, itemPosY, -0.5f), transform.rotation);
         }
     }
 }
