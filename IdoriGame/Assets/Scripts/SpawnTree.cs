@@ -11,8 +11,11 @@ using UnityEngine;
 
 public class SpawnTree : MonoBehaviour
 {
-    // 3 parts of a tree that spawn together
+    // 4 parts of a tree that spawn together (trunk, leaves, leftBranch, rightBranch)
     public GameObject trunk;
+    public GameObject leaves_1; // there are 3 variations of the leaves; this script will randomly pick 1
+    public GameObject leaves_2;
+    public GameObject leaves_3;
     public GameObject leftBranch;
     public GameObject rightBranch;
 
@@ -28,6 +31,7 @@ public class SpawnTree : MonoBehaviour
     public float minSpawnLag;
     public float maxSpawnLag;
 
+    // used to access the SpawnItem script within Game Manager
     public GameObject gameManager;
 
     // float that's used to help with the timing of tree spawns
@@ -46,7 +50,7 @@ public class SpawnTree : MonoBehaviour
         }
     }
 
-    void Spawn()
+    public void Spawn()
     {
         // local clones of the tree branches
         /**
@@ -65,22 +69,40 @@ public class SpawnTree : MonoBehaviour
         float randomBranchLength_Left = Random.Range(minBranchLength, maxBranchLength);
         float randomBranchLength_Right = Random.Range(minBranchLength, maxBranchLength);
 
+        GameObject randomLeaves; // this will be set to 1 of the 3 tree leaves later on
+        int leavesChance = Random.Range(0, 3); // a randomized int used to determine which tree leaves to choose
+
+        SpawnItem itemSpawner = gameManager.GetComponent<SpawnItem>(); // used to spawn items on the branches
+
         // spawn the tree trunk
         Instantiate(trunk, transform.position + new Vector3(0, 0, 0.5f), transform.rotation);
 
+        // randomly choose 1 of the 3 tree leaves
+        if(leavesChance == 0)
+        {
+            randomLeaves = leaves_1;
+        }
+        else if(leavesChance == 1)
+        {
+            randomLeaves = leaves_2;
+        }
+        else
+        {
+            randomLeaves = leaves_3;
+        }
+
+        // spawn the tree leaves on top of the trunk
+        Instantiate(randomLeaves, transform.position + new Vector3(0, 4.2f, 0), transform.rotation);
+
         // spawn the branches (while assigning the return value of Instantiate() to the clones at the same time)
-        leftBranchClone = Instantiate(leftBranch, transform.position + new Vector3(0, randomSpawnY_Left, 0), transform.rotation);
-        rightBranchClone = Instantiate(rightBranch, transform.position + new Vector3(0, randomSpawnY_Right, 0), transform.rotation);
+        leftBranchClone = Instantiate(leftBranch, transform.position + new Vector3(0, randomSpawnY_Left, 1), leftBranch.transform.rotation);
+        rightBranchClone = Instantiate(rightBranch, transform.position + new Vector3(0, randomSpawnY_Right, 1), rightBranch.transform.rotation);
 
         // edit the clones' scales to change the lengths of the branches
-        leftBranchClone.transform.localScale = new Vector3(randomBranchLength_Left, 0.3f, 1);
-        rightBranchClone.transform.localScale = new Vector3(randomBranchLength_Right, 0.3f, 1);
-
-        //rightBranchClone.transform.localScale = new Vector3(-rightBranchClone.transform.localScale.x, rightBranchClone.transform.localScale.y, rightBranchClone.transform.localScale.z);
+        leftBranchClone.transform.localScale = new Vector3(randomBranchLength_Left, leftBranch.transform.localScale.y, 1);
+        rightBranchClone.transform.localScale = new Vector3(randomBranchLength_Right, rightBranch.transform.localScale.y, 1);
 
         // spawn items
-        SpawnItem itemSpawner = gameManager.GetComponent<SpawnItem>();
-
         itemSpawner.Spawn(leftBranchClone);
         itemSpawner.Spawn(rightBranchClone);
     }
