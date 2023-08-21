@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3178996687616331995}
   - component: {fileID: 1709119160172319548}
   m_Layer: 0
-  m_Name: Leaves_3
+  m_Name: Leaves 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 2256874979528907086}
   - component: {fileID: 3139024226232818628}
   m_Layer: 0
-  m_Name: Leaves_3 Sprite
+  m_Name: Leaves 3 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

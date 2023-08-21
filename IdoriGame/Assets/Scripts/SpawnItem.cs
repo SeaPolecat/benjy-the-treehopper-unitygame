@@ -11,6 +11,7 @@ public class SpawnItem : MonoBehaviour
 {
     public float spawnChance; // a float between 0-1; the percentage chance that each branch will spawn an item
     public GameObject apple; // the item to be spawned
+    public float offset;
 
     public void Spawn(GameObject branch)
     {
@@ -21,7 +22,6 @@ public class SpawnItem : MonoBehaviour
 
         float itemPosX;
         float itemPosY = branch.transform.position.y + 0.8f;
-        float offset = 1f;
 
         if(branch.tag == "Right")
         {

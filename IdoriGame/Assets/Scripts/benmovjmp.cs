@@ -4,18 +4,44 @@ using UnityEngine;
 
 public class benmovjmp : MonoBehaviour
 {
-    private float horizontal;
+    /*private float horizontal;
     private float speed = 8f;
     private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
-    [SerializeField] private Rigidbody2D rb;
+    // we use SerializeField to prevent other code from modifying this (this only becomes modifiable in the inspector)
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask groundLayer;*/
+
+    public float jumpForce;
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+
+    private Rigidbody2D rb;
+    private bool isTouchingGround;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     void Update()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
+        /**
+         * Physics2D.OverlapCircle:
+         * gets the position of groundCheck (an empty object at the player's feet),
+         * draws a circle of a specified radius around this position, and
+         * checks if that circle is touching the groundLayer
+         */
+        isTouchingGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        if(Input.GetKeyDown(KeyCode.Space) && isTouchingGround)
+        {
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+
+        /*horizontal = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
@@ -27,10 +53,10 @@ public class benmovjmp : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
 
-        Flip();
+        Flip();*/
     }
 
-    private void FixedUpdate()
+    /*private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
     }
@@ -49,5 +75,5 @@ public class benmovjmp : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
-    }
+    }*/
 }
