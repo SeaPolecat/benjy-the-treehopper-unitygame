@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /**
- * This script is attached to:
+ * ATTACHED TO:
  * -Side Border
  */
 
 public class DeleteObject : MonoBehaviour
 {
     // delete everything that this object collides with
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        Destroy(collision.gameObject);
+        Destroy(other.gameObject);
     }
 }

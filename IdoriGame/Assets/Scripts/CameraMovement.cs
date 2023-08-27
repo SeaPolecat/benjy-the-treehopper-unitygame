@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /**
- * This script is attached to:
+ * ATTACHED TO:
  * -Game Manager
  */
 
-// IDEA: could make the camera move faster as the game progresses?
-
 public class CameraMovement : MonoBehaviour
 {
-    public float cameraSpeed;
+    public float cameraSpeed; // the speed at which the camera moves
 
     void Update()
     {
+        // continuously move the camera towards the right
         transform.position += new Vector3(cameraSpeed * Time.deltaTime, 0, 0);
 
+        // continously increase the speed of the camera
         cameraSpeed += 0.05f * Time.deltaTime;
     }
 }

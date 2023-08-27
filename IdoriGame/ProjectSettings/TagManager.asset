@@ -4,8 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Left
-  - Right
+  - LeftBranch
+  - RightBranch
+  - Seed
+  - KillZone
   layers:
   - Default
   - TransparentFX

@@ -2,26 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * ATTACHED TO:
+ * -Player
+ */
+
 public class benmovjmp : MonoBehaviour
 {
-    /*private float horizontal;
-    private float speed = 8f;
-    private float jumpingPower = 16f;
-    private bool isFacingRight = true;
+    public float jumpForce; // how strong Benjy's jump is
+    public Transform groundCheck; // the position of the ground check circle at Benjy's feet
+    public float groundCheckRadius; // the radius of the ground check circle
+    public LayerMask groundLayer; // the layer that defines what the ground (branches) is
+    public float jumpTime; // how long the player can hold jump for
 
-    // we use SerializeField to prevent other code from modifying this (this only becomes modifiable in the inspector)
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;*/
+    private Rigidbody2D rb; // the rigid body component of the player
+    private bool isTouchingGround; // whether or not the player is touching the ground
+    private float jumpTimeCounter; // a timer that decreases as the jump key is held down; used for the hold jump mechanic
+    private bool isJumping; // whether or not the player is in a jumping state
 
-    public float jumpForce;
-    public Transform groundCheck;
-    public float groundCheckRadius;
-    public LayerMask groundLayer;
-
-    private Rigidbody2D rb;
-    private bool isTouchingGround;
-
-    private void Start()
+    void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
@@ -36,44 +35,47 @@ public class benmovjmp : MonoBehaviour
          */
         isTouchingGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        if(Input.GetKeyDown(KeyCode.Space) && isTouchingGround)
+        // make the player jump when the jump key is pressed
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+            && isTouchingGround)
         {
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            isJumping = true;
+            jumpTimeCounter = jumpTime;
+
+            rb.velocity = Vector2.up * jumpForce;
         }
 
-        /*horizontal = Input.GetAxisRaw("Horizontal");
-
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        // continuously propel the player forward, if the jump key is held down
+        if ((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
+            && isJumping)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            if(jumpTimeCounter > 0)
+            {
+                // continuously decrease jumpTimeCounter, if it's not 0 yet
+                jumpTimeCounter -= Time.deltaTime;
+
+                rb.velocity = Vector2.up * jumpForce;
+            }
+            else
+            {
+                // if jumpTimeCounter reaches 0, stop jumping
+                isJumping = false;
+            }
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        // stop jumping when the player releases the jump key
+        if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.UpArrow))
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            isJumping = false;
         }
-
-        Flip();*/
     }
 
-    /*private void FixedUpdate()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-    }
-
-    private bool IsGrounded()
-    {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-    }
-
-    private void Flip()
-    {
-        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        // delete Benjy if he touches the killzone (bottom border)
+        if (other.tag == "KillZone")
         {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            Destroy(gameObject);
         }
-    }*/
+    }
 }

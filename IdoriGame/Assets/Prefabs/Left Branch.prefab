@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 4218232996041096562}
   m_Layer: 6
   m_Name: Left Branch
-  m_TagString: Left
+  m_TagString: LeftBranch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
