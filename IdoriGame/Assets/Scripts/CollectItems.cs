@@ -3,35 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/**
- * ATTACHED TO:
- * -Player
- */
-
 public class CollectItems : MonoBehaviour
 {
-    public GameObject seed; // the seed object that the player collects
-    public Text seedCountText; // a text object that displays how many seeds the player has collected
+    public Text TX_SeedCountText; // a text component that displays how many seeds the player has collected
+    public ScoreManager S_ScoreText_ScoreManager;
+    public AudioSource AS_SparkleSound;
+    public AudioSource AS_MunchSound;
 
-    private float seedCount; // counts the number of seeds the player has
-    private AudioSource popSound; // a popping sound that plays every time the player collects a seed
+    private int seedCount; // counts the number of seeds the player has
+    //
+    private benmovjmp S_Player_Benmovjmp;
+
+    public int SeedCount
+    {
+        get { return seedCount; }
+    }
 
     void Start()
     {
-        popSound = GetComponent<AudioSource>();
+        S_Player_Benmovjmp = GetComponent<benmovjmp>();
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Seed")
+        if (other.tag == "Item")
         {
-            Destroy(other.gameObject);
+            GameObject itemSprite = other.gameObject.transform.GetChild(0).gameObject;
+            ParticleSystem PS_Item = other.gameObject.GetComponentInChildren<ParticleSystem>();
 
-            // increase the seed count and display it
-            seedCount++;
-            seedCountText.text = seedCount.ToString();
+            if (itemSprite.activeSelf)
+            {
+                itemSprite.SetActive(false);
 
-            popSound.Play();
+                PS_Item.Play();
+
+                switch (other.name)
+                {
+                    case "Seed(Clone)":
+                        seedCount++;
+
+                        TX_SeedCountText.text = seedCount.ToString();
+                        AS_SparkleSound.Play();
+                        break;
+
+                    case "Apple(Clone)":
+                        S_ScoreText_ScoreManager.EatApple();
+                        AS_MunchSound.Play();
+                        break;
+
+                    case "Banana(Clone)":
+                        S_Player_Benmovjmp.EatBanana();
+                        AS_MunchSound.Play();
+                        break;
+                }
+            }
         }
     }
 }

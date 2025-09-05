@@ -1,38 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/**
- * ATTACHED TO:
- * -Game Manager
- */
-
 public class GameOver : MonoBehaviour
 {
-    public GameObject gameOverPanel; // a panel that shows the user they lost
+    public float deathPauseTime;
+    //
+    public ScoreManager S_ScoreText_ScoreManager;
+    public CollectItems S_Player_CollectItems;
+
+    private float deathPauseTimeCounter;
+
+    void Start()
+    {
+        deathPauseTimeCounter = deathPauseTime;
+    }
 
     void Update()
     {
-        // continuously checks to see if the player is dead; if so, activate the game over panel
-        if(GameObject.FindGameObjectWithTag("Player") == null)
+        if (Menu.gameEnded)
         {
-            gameOverPanel.SetActive(true);
+            if (deathPauseTimeCounter > 0)
+            {
+                deathPauseTimeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                SceneManager.LoadScene("Menu");
+            }
         }
     }
 
-    /**
-     * REQUIRES:
-     * n/a
-     * 
-     * MODIFIES:
-     * n/a
-     * 
-     * EFFECTS:
-     * reloads the scene to restart the game
-     */
-    public void Restart()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (other.tag == "Player")
+        {
+            Destroy(other.gameObject);
+
+            Menu.gameEnded = true;
+            Menu.endScore = S_ScoreText_ScoreManager.Score;
+
+            if (S_ScoreText_ScoreManager.Score > Menu.highScore)
+            {
+                Menu.highScore = S_ScoreText_ScoreManager.Score;
+            }
+            Menu.endSeedCount = S_Player_CollectItems.SeedCount;
+        }
     }
 }
